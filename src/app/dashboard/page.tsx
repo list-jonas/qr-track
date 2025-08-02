@@ -1,13 +1,3 @@
-import { LogoutButton } from "@/components/auth/logout";
-import React from "react";
-
-const DashboardPage = () => {
-  return (
-    <div>
-      <h1>Dashboard</h1>
-      <LogoutButton />
-    </div>
-  );
-};
-
-export default DashboardPage;
+export default function Page() {
+  return <div className="flex h-svh items-center justify-center"></div>;
+}
