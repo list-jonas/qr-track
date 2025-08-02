@@ -118,7 +118,7 @@ export function QrCodeDetailClientPage({
       {/* Overview Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-sm font-medium">Total Scans</CardTitle>
             <Eye className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -128,7 +128,7 @@ export function QrCodeDetailClientPage({
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-sm font-medium">Last 7 Days</CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -138,7 +138,7 @@ export function QrCodeDetailClientPage({
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-sm font-medium">Status</CardTitle>
             <QrCodeIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -153,7 +153,7 @@ export function QrCodeDetailClientPage({
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-sm font-medium">Countries</CardTitle>
             <ExternalLink className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
