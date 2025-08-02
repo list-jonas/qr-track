@@ -4,7 +4,7 @@ import { qrCode } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { recordQrCodeScan } from "@/server/qr-codes";
 import { headers } from "next/headers";
-import UAParser from "ua-parser-js";
+import { UAParser } from "ua-parser-js";
 
 export async function GET(
   request: NextRequest,
@@ -38,7 +38,7 @@ export async function GET(
     let os: string | undefined;
     let browser: string | undefined;
     if (userAgent) {
-      const ua = new UAParser.UAParser(userAgent);
+      const ua = new UAParser(userAgent);
       os = ua.getOS().name || undefined;
       browser = ua.getBrowser().name || undefined;
     }

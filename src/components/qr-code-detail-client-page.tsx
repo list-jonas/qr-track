@@ -174,6 +174,9 @@ export function QrCodeDetailClientPage({
             <CardDescription>
               Scan this code to visit: {qrCode.url} (via tracking)
             </CardDescription>
+            <CardDescription>
+              Tracked URL: {window.location.origin + "/api/scan/" + qrCode.id}
+            </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col items-center space-y-4">
             <img
