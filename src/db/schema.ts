@@ -66,9 +66,42 @@ export const verification = pgTable("verification", {
   ),
 });
 
+export const qrCode = pgTable("qr_code", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  url: text("url").notNull(),
+  description: text("description"),
+  isActive: boolean("is_active").default(true).notNull(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at")
+    .$defaultFn(() => new Date())
+    .notNull(),
+  updatedAt: timestamp("updated_at")
+    .$defaultFn(() => new Date())
+    .notNull(),
+});
+
+export const qrCodeScan = pgTable("qr_code_scan", {
+  id: text("id").primaryKey(),
+  qrCodeId: text("qr_code_id")
+    .notNull()
+    .references(() => qrCode.id, { onDelete: "cascade" }),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  country: text("country"),
+  city: text("city"),
+  scannedAt: timestamp("scanned_at")
+    .$defaultFn(() => new Date())
+    .notNull(),
+});
+
 export const schema = {
   user,
   session,
   account,
   verification,
+  qrCode,
+  qrCodeScan,
 };
