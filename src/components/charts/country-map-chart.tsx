@@ -6,7 +6,6 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  ResponsiveContainer,
 } from "recharts";
 import {
   Card,
@@ -19,7 +18,6 @@ import {
   ChartContainer,
   ChartConfig,
   ChartTooltip,
-  ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Badge } from "@/components/ui/badge";
 import { Globe } from "lucide-react";
@@ -117,7 +115,13 @@ export function CountryMapChart({
 
   const totalVisits = countryData.reduce((sum, item) => sum + item.visits, 0);
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  interface CustomTooltipProps {
+    active?: boolean;
+    payload?: Array<{ payload: { name: string; flag: string }; value: number }>;
+
+  }
+
+  const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
       const data = payload[0];
       const percentage = ((data.value / totalVisits) * 100).toFixed(1);

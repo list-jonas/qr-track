@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { QrCode, Scan, ScanStat } from "@/server/qr-codes";
 import {
   Card,
@@ -22,8 +23,6 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  BarChart,
-  Bar,
 } from "recharts";
 import {
   BrowserOsPieChart,
@@ -36,8 +35,6 @@ import {
   Calendar,
   ExternalLink,
   Download,
-  Edit,
-  Trash2,
   ArrowLeft,
 } from "lucide-react";
 import Link from "next/link";
@@ -179,11 +176,15 @@ export function QrCodeDetailClientPage({
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col items-center space-y-4">
-            <img
-              src={qrCodeDataUrl}
-              alt={`QR Code for ${qrCode.name}`}
-              className="border rounded-lg"
-            />
+            <div className="relative w-48 h-48">
+              <Image
+                src={qrCodeDataUrl}
+                alt={`QR Code for ${qrCode.name}`}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                style={{ objectFit: 'contain' }}
+              />
+            </div>
             <div className="flex gap-2">
               <Button
                 variant="outline"

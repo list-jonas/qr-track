@@ -17,6 +17,8 @@ import { toast } from "sonner";
 import { createQrCode } from "@/server/qr-codes";
 import { QrCode, Loader2 } from "lucide-react";
 import QRCodeLib from "qrcode";
+import Image from "next/image";
+
 import { useSession } from "@/hooks/use-session";
 
 export default function CreateQrCodePage() {
@@ -82,6 +84,8 @@ export default function CreateQrCodePage() {
     setIsLoading(true);
 
     try {
+
+
       const result = await createQrCode({
         ...formData,
         userId: session.user.id,
@@ -195,11 +199,16 @@ export default function CreateQrCodePage() {
           <CardContent className="flex items-center justify-center">
             {qrCodeDataUrl ? (
               <div className="text-center space-y-4">
-                <img
-                  src={qrCodeDataUrl}
-                  alt="QR Code Preview"
-                  className="mx-auto border rounded-lg"
-                />
+                <div className="relative w-48 h-48">
+                  <Image
+                    src={qrCodeDataUrl}
+                    alt="QR Code Preview"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    style={{ objectFit: 'contain' }}
+                  />
+                </div>
+
                 <p className="text-sm text-muted-foreground">
                   QR code for: {formData.url}
                 </p>

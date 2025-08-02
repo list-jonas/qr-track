@@ -13,10 +13,10 @@ export default async function DashboardPage() {
     redirect("/sign-in");
   }
 
-  const { success, stats, error } = await getDashboardStats(session.user.id);
+  const { success, stats } = await getDashboardStats(session.user.id);
 
   if (!success || !stats) {
-    return <div>Error: {error}</div>;
+    return <div>Error loading dashboard data.</div>;
   }
 
   return <DashboardClientPage stats={stats} />;

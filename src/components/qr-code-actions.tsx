@@ -73,19 +73,19 @@ export function QrCodeActions({ qrCode }: QrCodeActionsProps) {
     setIsLoading(true);
 
     try {
-      const result = await updateQrCode(qrCode.id, session.user.id, {
+      const { success, error } = await updateQrCode(qrCode.id, session.user.id, {
         name: formData.name,
         url: formData.url,
         description: formData.description || undefined,
         isActive: formData.isActive,
       });
 
-      if (result.success) {
+      if (success) {
         toast.success("QR code updated successfully!");
         setIsEditOpen(false);
         router.refresh();
       } else {
-        toast.error(result.error || "Failed to update QR code");
+        toast.error(error || "Failed to update QR code");
       }
     } catch (error) {
       toast.error("An unexpected error occurred");
@@ -103,13 +103,13 @@ export function QrCodeActions({ qrCode }: QrCodeActionsProps) {
     setIsLoading(true);
 
     try {
-      const result = await deleteQrCode(qrCode.id, session.user.id);
+      const { success, error } = await deleteQrCode(qrCode.id, session.user.id);
 
-      if (result.success) {
+      if (success) {
         toast.success("QR code deleted successfully!");
         router.push("/dashboard/qr-codes");
       } else {
-        toast.error(result.error || "Failed to delete QR code");
+        toast.error(error || "Failed to delete QR code");
       }
     } catch (error) {
       toast.error("An unexpected error occurred");

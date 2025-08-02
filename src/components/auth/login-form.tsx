@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Loader2 } from "lucide-react";
+import Image from "next/image";
 
 const FormSchema = z.object({
   email: z.string().email({ message: "Enter a valid email address." }),
@@ -129,9 +130,10 @@ export function LoginForm({
             </form>
           </Form>
           <div className="bg-muted relative hidden md:block">
-            <img
+            <Image
               src="/placeholder.jpg"
               alt="Image"
+              fill
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />
           </div>

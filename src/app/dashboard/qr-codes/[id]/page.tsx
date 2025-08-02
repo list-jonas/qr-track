@@ -19,7 +19,7 @@ export default async function QrCodeDetailPage({ params }: Props) {
     redirect("/sign-in");
   }
 
-  const { success, qrCode, scans, scanStats, error } = await getQrCodeById(
+  const { success, qrCode, scans, scanStats } = await getQrCodeById(
     id,
     session.user.id
   );

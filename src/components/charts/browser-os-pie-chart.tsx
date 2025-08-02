@@ -13,9 +13,7 @@ import {
   ChartContainer,
   ChartConfig,
   ChartTooltip,
-  ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Button } from "@/components/ui/button";
 import { Monitor, Smartphone } from "lucide-react";
 import { Scan } from "@/server/qr-codes";
 
@@ -78,7 +76,12 @@ export function BrowserOsPieChart({
   const currentData = activeView === "browser" ? browserData : osData;
   const total = currentData.reduce((sum, item) => sum + item.value, 0);
 
-  const CustomTooltip = ({ active, payload }: any) => {
+  interface CustomTooltipProps {
+    active?: boolean;
+    payload?: Array<{ payload: { name: string }; value: number }>;
+  }
+
+  const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
       const data = payload[0];
       const percentage = ((data.value / total) * 100).toFixed(1);

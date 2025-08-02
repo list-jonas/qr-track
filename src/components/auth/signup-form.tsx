@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import Image from "next/image";
 
 const FormSchema = z
   .object({
@@ -165,11 +166,10 @@ export function SignupForm({
             </form>
           </Form>
           <div className="bg-muted relative hidden md:block">
-            <img
+            <Image
               src="/placeholder.jpg"
               alt="Image"
-              width="1920"
-              height="1080"
+              fill
               className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />
           </div>

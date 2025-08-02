@@ -31,7 +31,7 @@ export default async function QrCodesPage() {
     redirect("/sign-in");
   }
 
-  const { success, qrCodes, error } = await getQrCodes(session.user.id);
+  const { success, qrCodes } = await getQrCodes(session.user.id);
 
   if (!success) {
     return (
