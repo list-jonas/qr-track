@@ -185,7 +185,18 @@ export function QrCodeDetailClientPage({
               className="border rounded-lg"
             />
             <div className="flex gap-2">
-              <Button variant="outline" size="sm">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  const link = document.createElement("a");
+                  link.href = qrCodeDataUrl;
+                  link.download = `${qrCode.name}.png`;
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }}
+              >
                 <Download className="mr-2 h-4 w-4" />
                 Download
               </Button>
