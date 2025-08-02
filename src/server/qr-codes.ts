@@ -1,39 +1,42 @@
-"use server"
+"use server";
 
-import { db } from "@/db/drizzle"
-import { qrCode, qrCodeScan } from "@/db/schema"
+import { db } from "@/db/drizzle";
+import { qrCode, qrCodeScan } from "@/db/schema";
 import { InferSelectModel } from "drizzle-orm";
 
 export type QrCode = InferSelectModel<typeof qrCode>;
 export type Scan = InferSelectModel<typeof qrCodeScan>;
-import { eq, desc, count, sql } from "drizzle-orm"
-import { nanoid } from "nanoid"
-import { revalidatePath } from "next/cache"
+import { eq, desc, count, sql } from "drizzle-orm";
+import { nanoid } from "nanoid";
+import { revalidatePath } from "next/cache";
 
 export async function createQrCode(data: {
-  name: string
-  url: string
-  description?: string
-  userId: string
+  name: string;
+  url: string;
+  description?: string;
+  userId: string;
 }) {
   try {
-    const id = nanoid()
-    
-    const [newQrCode] = await db.insert(qrCode).values({
-      id,
-      name: data.name,
-      url: data.url,
-      description: data.description,
-      userId: data.userId,
-    }).returning()
+    const id = nanoid();
 
-    revalidatePath("/dashboard")
-    revalidatePath("/dashboard/qr-codes")
-    
-    return { success: true, qrCode: newQrCode }
+    const [newQrCode] = await db
+      .insert(qrCode)
+      .values({
+        id,
+        name: data.name,
+        url: data.url,
+        description: data.description,
+        userId: data.userId,
+      })
+      .returning();
+
+    revalidatePath("/dashboard");
+    revalidatePath("/dashboard/qr-codes");
+
+    return { success: true, qrCode: newQrCode };
   } catch (error) {
-    console.error("Error creating QR code:", error)
-    return { success: false, error: "Failed to create QR code" }
+    console.error("Error creating QR code:", error);
+    return { success: false, error: "Failed to create QR code" };
   }
 }
 
@@ -54,12 +57,12 @@ export async function getQrCodes(userId: string) {
       .leftJoin(qrCodeScan, eq(qrCode.id, qrCodeScan.qrCodeId))
       .where(eq(qrCode.userId, userId))
       .groupBy(qrCode.id)
-      .orderBy(desc(qrCode.createdAt))
+      .orderBy(desc(qrCode.createdAt));
 
-    return { success: true, qrCodes }
+    return { success: true, qrCodes };
   } catch (error) {
-    console.error("Error fetching QR codes:", error)
-    return { success: false, error: "Failed to fetch QR codes" }
+    console.error("Error fetching QR codes:", error);
+    return { success: false, error: "Failed to fetch QR codes" };
   }
 }
 
@@ -69,17 +72,17 @@ export async function getQrCodeById(id: string, userId: string) {
       .select()
       .from(qrCode)
       .where(eq(qrCode.id, id) && eq(qrCode.userId, userId))
-      .limit(1)
+      .limit(1);
 
     if (!qrCodeData) {
-      return { success: false, error: "QR code not found" }
+      return { success: false, error: "QR code not found" };
     }
 
     const scans = await db
       .select()
       .from(qrCodeScan)
       .where(eq(qrCodeScan.qrCodeId, id))
-      .orderBy(desc(qrCodeScan.scannedAt))
+      .orderBy(desc(qrCodeScan.scannedAt));
 
     const scanStats = await db
       .select({
@@ -89,26 +92,30 @@ export async function getQrCodeById(id: string, userId: string) {
       .from(qrCodeScan)
       .where(eq(qrCodeScan.qrCodeId, id))
       .groupBy(sql`DATE(${qrCodeScan.scannedAt})`)
-      .orderBy(sql`DATE(${qrCodeScan.scannedAt})`)
+      .orderBy(sql`DATE(${qrCodeScan.scannedAt})`);
 
     return {
       success: true,
       qrCode: qrCodeData,
       scans,
       scanStats,
-    }
+    };
   } catch (error) {
-    console.error("Error fetching QR code:", error)
-    return { success: false, error: "Failed to fetch QR code" }
+    console.error("Error fetching QR code:", error);
+    return { success: false, error: "Failed to fetch QR code" };
   }
 }
 
-export async function updateQrCode(id: string, userId: string, data: {
-  name?: string
-  url?: string
-  description?: string
-  isActive?: boolean
-}) {
+export async function updateQrCode(
+  id: string,
+  userId: string,
+  data: {
+    name?: string;
+    url?: string;
+    description?: string;
+    isActive?: boolean;
+  }
+) {
   try {
     const [updatedQrCode] = await db
       .update(qrCode)
@@ -117,20 +124,20 @@ export async function updateQrCode(id: string, userId: string, data: {
         updatedAt: new Date(),
       })
       .where(eq(qrCode.id, id) && eq(qrCode.userId, userId))
-      .returning()
+      .returning();
 
     if (!updatedQrCode) {
-      return { success: false, error: "QR code not found" }
+      return { success: false, error: "QR code not found" };
     }
 
-    revalidatePath("/dashboard")
-    revalidatePath("/dashboard/qr-codes")
-    revalidatePath(`/dashboard/qr-codes/${id}`)
-    
-    return { success: true, qrCode: updatedQrCode }
+    revalidatePath("/dashboard");
+    revalidatePath("/dashboard/qr-codes");
+    revalidatePath(`/dashboard/qr-codes/${id}`);
+
+    return { success: true, qrCode: updatedQrCode };
   } catch (error) {
-    console.error("Error updating QR code:", error)
-    return { success: false, error: "Failed to update QR code" }
+    console.error("Error updating QR code:", error);
+    return { success: false, error: "Failed to update QR code" };
   }
 }
 
@@ -139,31 +146,34 @@ export async function deleteQrCode(id: string, userId: string) {
     const [deletedQrCode] = await db
       .delete(qrCode)
       .where(eq(qrCode.id, id) && eq(qrCode.userId, userId))
-      .returning()
+      .returning();
 
     if (!deletedQrCode) {
-      return { success: false, error: "QR code not found" }
+      return { success: false, error: "QR code not found" };
     }
 
-    revalidatePath("/dashboard")
-    revalidatePath("/dashboard/qr-codes")
-    
-    return { success: true }
+    revalidatePath("/dashboard");
+    revalidatePath("/dashboard/qr-codes");
+
+    return { success: true };
   } catch (error) {
-    console.error("Error deleting QR code:", error)
-    return { success: false, error: "Failed to delete QR code" }
+    console.error("Error deleting QR code:", error);
+    return { success: false, error: "Failed to delete QR code" };
   }
 }
 
-export async function recordQrCodeScan(qrCodeId: string, data: {
-  ipAddress?: string
-  userAgent?: string
-  country?: string
-  city?: string
-}) {
+export async function recordQrCodeScan(
+  qrCodeId: string,
+  data: {
+    ipAddress?: string;
+    userAgent?: string;
+    country?: string;
+    city?: string;
+  }
+) {
   try {
-    const scanId = nanoid()
-    
+    const scanId = nanoid();
+
     await db.insert(qrCodeScan).values({
       id: scanId,
       qrCodeId,
@@ -171,12 +181,12 @@ export async function recordQrCodeScan(qrCodeId: string, data: {
       userAgent: data.userAgent,
       country: data.country,
       city: data.city,
-    })
+    });
 
-    return { success: true }
+    return { success: true };
   } catch (error) {
-    console.error("Error recording scan:", error)
-    return { success: false, error: "Failed to record scan" }
+    console.error("Error recording scan:", error);
+    return { success: false, error: "Failed to record scan" };
   }
 }
 
@@ -204,24 +214,26 @@ export interface DashboardStats {
   topQrCodes: TopQrCode[];
 }
 
-export async function getDashboardStats(userId: string): Promise<{ success: boolean; stats?: DashboardStats; error?: string }> {
+export async function getDashboardStats(
+  userId: string
+): Promise<{ success: boolean; stats?: DashboardStats; error?: string }> {
   try {
     const totalQrCodesResult = await db
       .select({ count: count() })
       .from(qrCode)
-      .where(eq(qrCode.userId, userId))
+      .where(eq(qrCode.userId, userId));
 
-    const totalQrCodes = totalQrCodesResult[0]?.count || 0
+    const totalQrCodes = totalQrCodesResult[0]?.count || 0;
 
     const totalScansResult = await db
       .select({ count: count() })
       .from(qrCodeScan)
       .leftJoin(qrCode, eq(qrCodeScan.qrCodeId, qrCode.id))
-      .where(eq(qrCode.userId, userId))
+      .where(eq(qrCode.userId, userId));
 
-    const totalScans = totalScansResult[0]?.count || 0
+    const totalScans = totalScansResult[0]?.count || 0;
 
-    const avgScansPerQr = totalQrCodes > 0 ? totalScans / totalQrCodes : 0
+    const avgScansPerQr = totalQrCodes > 0 ? totalScans / totalQrCodes : 0;
 
     const recentScans = await db
       .select({
@@ -233,7 +245,7 @@ export async function getDashboardStats(userId: string): Promise<{ success: bool
       .where(eq(qrCode.userId, userId))
       .groupBy(sql`DATE(${qrCodeScan.scannedAt})`)
       .orderBy(sql`DATE(${qrCodeScan.scannedAt})`)
-      .limit(30)
+      .limit(30);
 
     const topQrCodes = await db
       .select({
@@ -246,11 +258,20 @@ export async function getDashboardStats(userId: string): Promise<{ success: bool
       .where(eq(qrCode.userId, userId))
       .groupBy(qrCode.id, qrCode.name)
       .orderBy(desc(count(qrCodeScan.id)))
-      .limit(5)
+      .limit(5);
 
-    return { success: true, stats: { totalQrCodes, totalScans, avgScansPerQr, recentScans, topQrCodes } }
+    return {
+      success: true,
+      stats: {
+        totalQrCodes,
+        totalScans,
+        avgScansPerQr,
+        recentScans,
+        topQrCodes,
+      },
+    };
   } catch (error) {
-    console.error("Error fetching dashboard stats:", error)
-    return { success: false, error: "Failed to fetch dashboard stats" }
+    console.error("Error fetching dashboard stats:", error);
+    return { success: false, error: "Failed to fetch dashboard stats" };
   }
 }

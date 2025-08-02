@@ -1,32 +1,57 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChartContainer, ChartConfig, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, LineChart, Line } from "recharts"
-import { QrCode, Eye, TrendingUp, Calendar } from "lucide-react"
-import { DashboardStats, RecentScan, TopQrCode } from "@/server/qr-codes"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  ChartContainer,
+  ChartConfig,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+} from "recharts";
+import { QrCode, Eye, TrendingUp, Calendar } from "lucide-react";
+import { DashboardStats, RecentScan, TopQrCode } from "@/server/qr-codes";
 
 const chartConfig = {
   scans: {
     label: "Scans",
     color: "hsl(var(--chart-1))",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 interface DashboardClientPageProps {
-  stats: DashboardStats
+  stats: DashboardStats;
 }
 
-export default function DashboardClientPage({ stats }: DashboardClientPageProps) {
+export default function DashboardClientPage({
+  stats,
+}: DashboardClientPageProps) {
   const chartData = stats.recentScans.map((item: RecentScan) => ({
-    date: new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+    date: new Date(item.date).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    }),
     scans: item.count,
-  }))
+  }));
 
   const topQrCodesChartData = stats.topQrCodes.map((item: TopQrCode) => ({
     name: item.name,
     scans: item.scanCount,
-  }))
+  }));
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -50,11 +75,15 @@ export default function DashboardClientPage({ stats }: DashboardClientPageProps)
       </Card>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Avg. Scans per QR</CardTitle>
+          <CardTitle className="text-sm font-medium">
+            Avg. Scans per QR
+          </CardTitle>
           <TrendingUp className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{stats.avgScansPerQr.toFixed(2)}</div>
+          <div className="text-2xl font-bold">
+            {stats.avgScansPerQr.toFixed(2)}
+          </div>
         </CardContent>
       </Card>
       <Card>
@@ -63,7 +92,10 @@ export default function DashboardClientPage({ stats }: DashboardClientPageProps)
           <Calendar className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{stats.recentScans[stats.recentScans.length - 1]?.count || 0} scans today</div>
+          <div className="text-2xl font-bold">
+            {stats.recentScans[stats.recentScans.length - 1]?.count || 0} scans
+            today
+          </div>
         </CardContent>
       </Card>
 
@@ -91,7 +123,7 @@ export default function DashboardClientPage({ stats }: DashboardClientPageProps)
                 minTickGap={32}
                 tickFormatter={(value) => {
                   const date = new Date(value);
-                  return date.toLocaleDateString('en-US', { day: 'numeric' });
+                  return date.toLocaleDateString("en-US", { day: "numeric" });
                 }}
               />
               <YAxis
@@ -100,7 +132,10 @@ export default function DashboardClientPage({ stats }: DashboardClientPageProps)
                 tickMargin={8}
                 tickFormatter={(value) => value.toLocaleString()}
               />
-              <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
               <Line
                 dataKey="scans"
                 type="monotone"
@@ -134,12 +169,15 @@ export default function DashboardClientPage({ stats }: DashboardClientPageProps)
                 tickMargin={8}
                 tickFormatter={(value) => value.toLocaleString()}
               />
-              <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
               <Bar dataKey="scans" fill="var(--color-scans)" radius={8} />
             </BarChart>
           </ChartContainer>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

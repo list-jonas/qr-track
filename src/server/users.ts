@@ -11,8 +11,18 @@ export const signInEmail = async (email: string, password: string) => {
       },
     });
     return { success: true, message: "Login successful!" };
-  } catch (error: any) {
-    return { error: error.message };
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return { error: error.message };
+    } else if (
+      typeof error === "object" &&
+      error !== null &&
+      "message" in error
+    ) {
+      return { error: (error as { message: string }).message };
+    } else {
+      return { error: "An unknown error occurred." };
+    }
   }
 };
 
@@ -30,7 +40,17 @@ export const signUpEmail = async (
       },
     });
     return { success: true, message: "Signup successful!" };
-  } catch (error: any) {
-    return { error: error.message };
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return { error: error.message };
+    } else if (
+      typeof error === "object" &&
+      error !== null &&
+      "message" in error
+    ) {
+      return { error: (error as { message: string }).message };
+    } else {
+      return { error: "An unknown error occurred." };
+    }
   }
 };

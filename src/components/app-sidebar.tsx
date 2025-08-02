@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { Calendar, Home, Inbox, Search, Settings, QrCode, BarChart3, List, Plus } from "lucide-react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { QrCode, BarChart3, List, Plus } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import {
   Sidebar,
@@ -15,7 +15,7 @@ import {
   SidebarMenuItem,
   SidebarHeader,
   SidebarFooter,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 // Menu items.
 const items = [
@@ -34,10 +34,10 @@ const items = [
     url: "/dashboard/qr-codes",
     icon: List,
   },
-]
+];
 
 export function AppSidebar() {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <Sidebar>
@@ -67,10 +67,8 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="border-t p-4">
-        <div className="text-xs text-muted-foreground">
-          © 2024 QR Track
-        </div>
+        <div className="text-xs text-muted-foreground">© 2024 QR Track</div>
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

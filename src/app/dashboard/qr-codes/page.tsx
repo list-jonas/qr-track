@@ -1,31 +1,44 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { QrCode, Eye, Calendar, ExternalLink, Plus } from "lucide-react"
-import Link from "next/link"
-import { getQrCodes } from "@/server/qr-codes"
-import { auth } from "@/lib/auth"
-import { headers } from "next/headers"
-import { redirect } from "next/navigation"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { QrCode, Eye, Calendar, ExternalLink, Plus } from "lucide-react";
+import Link from "next/link";
+import { getQrCodes } from "@/server/qr-codes";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 export default async function QrCodesPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
-  })
+  });
 
   if (!session) {
-    redirect("/sign-in")
+    redirect("/sign-in");
   }
 
-  const { success, qrCodes, error } = await getQrCodes(session.user.id)
+  const { success, qrCodes, error } = await getQrCodes(session.user.id);
 
   if (!success) {
     return (
       <div className="flex items-center justify-center h-96">
         <p className="text-muted-foreground">Failed to load QR codes</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -66,7 +79,8 @@ export default async function QrCodesPage() {
           <CardHeader>
             <CardTitle>Your QR Codes</CardTitle>
             <CardDescription>
-              {qrCodes!.length} QR code{qrCodes!.length !== 1 ? 's' : ''} created
+              {qrCodes!.length} QR code{qrCodes!.length !== 1 ? "s" : ""}{" "}
+              created
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -110,7 +124,9 @@ export default async function QrCodesPage() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge variant={qrCode.isActive ? "default" : "secondary"}>
+                      <Badge
+                        variant={qrCode.isActive ? "default" : "secondary"}
+                      >
                         {qrCode.isActive ? "Active" : "Inactive"}
                       </Badge>
                     </TableCell>
@@ -141,5 +157,5 @@ export default async function QrCodesPage() {
         </Card>
       )}
     </div>
-  )
+  );
 }

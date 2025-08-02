@@ -37,12 +37,13 @@ Key directories:
    ```bash
    npm install
    ```
-3. Set up environment variables (copy `.env.example` to `.env`)
-4. Run the development server:
+3. **Database Setup**: This project requires a PostgreSQL database. Ensure you have one set up and configure your environment variables accordingly.
+4. Set up environment variables (copy `.env.example` to `.env`)
+5. Run the development server:
    ```bash
    npm run dev
    ```
-5. Open [http://localhost:3000](http://localhost:3000) in your browser
+6. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ## Scripts
 
@@ -54,3 +55,30 @@ Key directories:
 ## Deployment
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+
+## 👨‍💻 Author
+
+**Created by Jonas**
+For more projects and information, visit <mcurl name="jonas-list.vercel.app" url="https://jonas-list.vercel.app"></mcurl>.
+
+
+## 📊 Stats
+
+- ![GitHub stars](https://img.shields.io/github/stars/list-jonas/qr-track)
+- ![GitHub forks](https://img.shields.io/github/forks/list-jonas/qr-track)
+- ![GitHub issues](https://img.shields.io/github/issues/list-jonas/qr-track)
+- ![GitHub pull requests](https://img.shields.io/github/issues-pr/list-jonas/qr-track)
+- ![Profile views](https://komarev.com/ghpvc/?username=list-jonas&repo=qr-track&color=blue)
+
+
+## 📈 Star History
+
+Check out the star history for this project:
+<a href="https://star-history.com/#list-jonas/qr-track&Date">
+   <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=list-jonas/qr-track&type=Date&theme=dark" />
+      <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=list-jonas/qr-track&type=Date" />
+      <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=list-jonas/qr-track&type=Date" />
+   </picture>
+</a>

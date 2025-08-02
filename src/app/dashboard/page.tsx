@@ -1,11 +1,3 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { QrCode, Eye, TrendingUp, Calendar } from "lucide-react";
 import { getDashboardStats } from "@/server/qr-codes";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
