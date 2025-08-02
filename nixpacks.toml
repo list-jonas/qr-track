@@ -21,7 +21,6 @@ cmds = ["npm install --frozen-lockfile"]
 [phases.setup]
 nixPkgs = [
     "nodejs_20", # Specify Node.js version 20
-    "npm",
 ]
 
 [start]
