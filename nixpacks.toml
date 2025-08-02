@@ -1,0 +1,28 @@
+# For more information, see the Nixpacks documentation: https://nixpacks.com/docs
+
+# This file is used by Nixpacks to build and deploy your application.
+# It allows you to customize the build process.
+
+# You can generate a default nixpacks.toml by running:
+# nixpacks plan . -f toml > nixpacks.toml
+
+[phases.build]
+dependsOn = ["install"]
+cmds = ["npm run build"]
+cacheDirectories = [
+    ".next/cache",
+    "node_modules/.cache",
+]
+
+[phases.install]
+dependsOn = ["setup"]
+cmds = ["npm install --frozen-lockfile"]
+
+[phases.setup]
+nixPkgs = [
+    "nodejs_20", # Specify Node.js version 20
+    "npm",
+]
+
+[start]
+cmd = "npm run start"
