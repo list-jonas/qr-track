@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import {
   ChartContainer,
   ChartConfig,
@@ -19,7 +20,6 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  ResponsiveContainer,
   LineChart,
   Line,
 } from "recharts";
@@ -176,6 +176,32 @@ export default function DashboardClientPage({
               <Bar dataKey="scans" fill="var(--color-scans)" radius={8} />
             </BarChart>
           </ChartContainer>
+        </CardContent>
+      </Card>
+
+      <Card className="col-span-2">
+        <CardHeader>
+          <CardTitle>Top Countries</CardTitle>
+          <CardDescription>Where your scans are coming from</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {stats.topCountries.length > 0 ? (
+            <ul className="space-y-2">
+              {stats.topCountries.map((country, index) => (
+                <li
+                  key={index}
+                  className="flex items-center justify-between text-sm"
+                >
+                  <span>{country.country ?? "Unknown"}</span>
+                  <Badge variant="secondary">{country.scanCount}</Badge>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-muted-foreground text-sm">
+              No country data available yet.
+            </p>
+          )}
         </CardContent>
       </Card>
     </div>

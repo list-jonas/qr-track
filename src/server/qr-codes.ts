@@ -206,12 +206,18 @@ export interface TopQrCode {
   scanCount: number;
 }
 
+export interface TopCountry {
+  country: string | null;
+  scanCount: number;
+}
+
 export interface DashboardStats {
   totalQrCodes: number;
   totalScans: number;
   avgScansPerQr: number;
   recentScans: RecentScan[];
   topQrCodes: TopQrCode[];
+  topCountries: TopCountry[];
 }
 
 export async function getDashboardStats(
@@ -260,6 +266,18 @@ export async function getDashboardStats(
       .orderBy(desc(count(qrCodeScan.id)))
       .limit(5);
 
+    const topCountries = await db
+      .select({
+        country: qrCodeScan.country,
+        scanCount: count(qrCodeScan.id),
+      })
+      .from(qrCodeScan)
+      .leftJoin(qrCode, eq(qrCodeScan.qrCodeId, qrCode.id))
+      .where(eq(qrCode.userId, userId))
+      .groupBy(qrCodeScan.country)
+      .orderBy(desc(count(qrCodeScan.id)))
+      .limit(5);
+
     return {
       success: true,
       stats: {
@@ -268,6 +286,7 @@ export async function getDashboardStats(
         avgScansPerQr,
         recentScans,
         topQrCodes,
+        topCountries,
       },
     };
   } catch (error) {
