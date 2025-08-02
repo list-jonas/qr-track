@@ -16,6 +16,7 @@ import {
   SidebarHeader,
   SidebarFooter,
 } from "@/components/ui/sidebar";
+import { LogoutButton } from "./auth/logout";
 
 // Menu items.
 const items = [
@@ -25,14 +26,14 @@ const items = [
     icon: BarChart3,
   },
   {
-    title: "Create QR Code",
-    url: "/dashboard/create",
-    icon: Plus,
-  },
-  {
     title: "QR Codes",
     url: "/dashboard/qr-codes",
     icon: List,
+  },
+  {
+    title: "Create QR Code",
+    url: "/dashboard/create",
+    icon: Plus,
   },
 ];
 
@@ -67,6 +68,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="border-t p-4">
+        <LogoutButton />
         <div className="text-xs text-muted-foreground">© 2024 QR Track</div>
       </SidebarFooter>
     </Sidebar>

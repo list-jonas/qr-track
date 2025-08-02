@@ -3,7 +3,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect, notFound } from "next/navigation";
 import QRCodeLib from "qrcode";
-import { QrCodeDetailClientPage } from "./qr-code-detail-client-page";
+import { QrCodeDetailClientPage } from "@/components/qr-code-detail-client-page";
 
 interface Props {
   params: Promise<{ id: string }>;

@@ -99,7 +99,7 @@ export default function DashboardClientPage({
         </CardContent>
       </Card>
 
-      <Card className="col-span-full">
+      <Card className="col-span-2">
         <CardHeader>
           <CardTitle>Daily Scan Activity (Last 30 Days)</CardTitle>
           <CardDescription>Scans over the last 30 days</CardDescription>
@@ -148,7 +148,7 @@ export default function DashboardClientPage({
         </CardContent>
       </Card>
 
-      <Card className="col-span-full">
+      <Card className="col-span-2">
         <CardHeader>
           <CardTitle>Top Performing QR Codes</CardTitle>
           <CardDescription>QR codes with the most scans</CardDescription>

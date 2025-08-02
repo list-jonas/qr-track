@@ -2,7 +2,7 @@ import { getDashboardStats } from "@/server/qr-codes";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import DashboardClientPage from "./dashboard-client-page";
+import DashboardClientPage from "@/components/dashboard-client-page";
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({
