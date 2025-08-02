@@ -2,6 +2,10 @@
 
 import { db } from "@/db/drizzle"
 import { qrCode, qrCodeScan } from "@/db/schema"
+import { InferSelectModel } from "drizzle-orm";
+
+export type QrCode = InferSelectModel<typeof qrCode>;
+export type Scan = InferSelectModel<typeof qrCodeScan>;
 import { eq, desc, count, sql } from "drizzle-orm"
 import { nanoid } from "nanoid"
 import { revalidatePath } from "next/cache"
@@ -174,6 +178,11 @@ export async function recordQrCodeScan(qrCodeId: string, data: {
     console.error("Error recording scan:", error)
     return { success: false, error: "Failed to record scan" }
   }
+}
+
+export interface ScanStat {
+  date: string;
+  count: number;
 }
 
 export interface RecentScan {

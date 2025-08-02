@@ -1,109 +1,117 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { toast } from "sonner"
-import { createQrCode } from "@/server/qr-codes"
-import { QrCode, Loader2 } from "lucide-react"
-import QRCodeLib from "qrcode"
-import { useSession } from "@/hooks/use-session"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
+import { createQrCode } from "@/server/qr-codes";
+import { QrCode, Loader2 } from "lucide-react";
+import QRCodeLib from "qrcode";
+import { useSession } from "@/hooks/use-session";
 
 export default function CreateQrCodePage() {
-  const router = useRouter()
-  const { data: session } = useSession()
-  const [isLoading, setIsLoading] = useState(false)
-  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string | null>(null)
+  const router = useRouter();
+  const { data: session } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     url: "",
     description: "",
-  })
+  });
 
   const generateQrCodePreview = async (url: string) => {
     if (!url) {
-      setQrCodeDataUrl(null)
-      return
+      setQrCodeDataUrl(null);
+      return;
     }
 
     try {
       // For preview, we'll show the tracking URL that would be generated
-      const trackingUrl = `${window.location.origin}/api/scan/preview`
+      const trackingUrl = `${window.location.origin}/api/scan/preview`;
       const dataUrl = await QRCodeLib.toDataURL(trackingUrl, {
         width: 200,
         margin: 2,
         color: {
-          dark: '#000000',
-          light: '#FFFFFF'
-        }
-      })
-      setQrCodeDataUrl(dataUrl)
+          dark: "#000000",
+          light: "#FFFFFF",
+        },
+      });
+      setQrCodeDataUrl(dataUrl);
     } catch (error) {
-      console.error('Error generating QR code preview:', error)
+      console.error("Error generating QR code preview:", error);
     }
-  }
+  };
 
   const handleUrlChange = (url: string) => {
-    setFormData(prev => ({ ...prev, url }))
-    generateQrCodePreview(url)
-  }
+    setFormData((prev) => ({ ...prev, url }));
+    generateQrCodePreview(url);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     if (!session?.user?.id) {
-      toast.error("You must be logged in to create QR codes")
-      return
+      toast.error("You must be logged in to create QR codes");
+      return;
     }
 
     if (!formData.name || !formData.url) {
-      toast.error("Name and URL are required")
-      return
+      toast.error("Name and URL are required");
+      return;
     }
 
     // Basic URL validation
     try {
-      new URL(formData.url)
+      new URL(formData.url);
     } catch {
-      toast.error("Please enter a valid URL")
-      return
+      toast.error("Please enter a valid URL");
+      return;
     }
 
-    setIsLoading(true)
+    setIsLoading(true);
 
     try {
       const result = await createQrCode({
         ...formData,
         userId: session.user.id,
-      })
+      });
 
       if (result.success) {
-        toast.success("QR code created successfully!")
-        router.push("/dashboard/qr-codes")
+        toast.success("QR code created successfully!");
+        router.push("/dashboard/qr-codes");
       } else {
-        toast.error(result.error || "Failed to create QR code")
+        toast.error(result.error || "Failed to create QR code");
       }
     } catch (error) {
-      toast.error("An unexpected error occurred")
+      toast.error("An unexpected error occurred");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   if (!session) {
     return (
       <div className="flex items-center justify-center h-96">
-        <p className="text-muted-foreground">Please log in to create QR codes</p>
+        <p className="text-muted-foreground">
+          Please log in to create QR codes
+        </p>
       </div>
-    )
+    );
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Create QR Code</h1>
         <p className="text-muted-foreground">
@@ -127,11 +135,13 @@ export default function CreateQrCodePage() {
                   id="name"
                   placeholder="My QR Code"
                   value={formData.name}
-                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, name: e.target.value }))
+                  }
                   required
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="url">URL *</Label>
                 <Input
@@ -143,18 +153,23 @@ export default function CreateQrCodePage() {
                   required
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="description">Description</Label>
                 <Textarea
                   id="description"
                   placeholder="Optional description for your QR code"
                   value={formData.description}
-                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      description: e.target.value,
+                    }))
+                  }
                   rows={3}
                 />
               </div>
-              
+
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? (
                   <>
@@ -175,16 +190,14 @@ export default function CreateQrCodePage() {
         <Card>
           <CardHeader>
             <CardTitle>Preview</CardTitle>
-            <CardDescription>
-              Live preview of your QR code
-            </CardDescription>
+            <CardDescription>Live preview of your QR code</CardDescription>
           </CardHeader>
           <CardContent className="flex items-center justify-center">
             {qrCodeDataUrl ? (
               <div className="text-center space-y-4">
-                <img 
-                  src={qrCodeDataUrl} 
-                  alt="QR Code Preview" 
+                <img
+                  src={qrCodeDataUrl}
+                  alt="QR Code Preview"
                   className="mx-auto border rounded-lg"
                 />
                 <p className="text-sm text-muted-foreground">
@@ -203,5 +216,5 @@ export default function CreateQrCodePage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
