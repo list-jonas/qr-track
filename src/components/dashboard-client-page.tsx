@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import {
   ChartContainer,
   ChartConfig,
@@ -23,6 +22,11 @@ import {
   LineChart,
   Line,
 } from "recharts";
+import {
+  BrowserOsPieChart,
+  CountryMapChart,
+  ActivityHeatmap,
+} from "@/components/charts";
 import { QrCode, Eye, TrendingUp, Calendar } from "lucide-react";
 import { DashboardStats, RecentScan, TopQrCode } from "@/server/qr-codes";
 
@@ -54,7 +58,7 @@ export default function DashboardClientPage({
   }));
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="mx-auto w-full max-w-7xl grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Total QR Codes</CardTitle>
@@ -121,27 +125,28 @@ export default function DashboardClientPage({
                 axisLine={false}
                 tickMargin={8}
                 minTickGap={32}
-                tickFormatter={(value) => {
-                  const date = new Date(value);
-                  return date.toLocaleDateString("en-US", { day: "numeric" });
-                }}
               />
               <YAxis
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}
-                tickFormatter={(value) => value.toLocaleString()}
+                tickFormatter={(value) => Math.floor(value).toString()}
+                domain={[
+                  0,
+                  chartData.reduce(
+                    (max, item) => Math.max(max, item.scans) + 5,
+                    0
+                  ),
+                ]}
+                allowDecimals={false}
               />
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent hideLabel />}
-              />
+              <ChartTooltip content={<ChartTooltipContent hideLabel />} />
               <Line
                 dataKey="scans"
                 type="monotone"
-                stroke="var(--color-scans)"
+                stroke="var(--primary)"
                 strokeWidth={2}
-                dot={false}
+                dot={true}
               />
             </LineChart>
           </ChartContainer>
@@ -167,43 +172,57 @@ export default function DashboardClientPage({
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}
-                tickFormatter={(value) => value.toLocaleString()}
+                tickFormatter={(value) => Math.floor(value).toString()}
+                domain={[
+                  0,
+                  topQrCodesChartData.reduce(
+                    (max, item) => Math.max(max, item.scans),
+                    0
+                  ) + 5,
+                ]}
+                allowDecimals={false}
               />
               <ChartTooltip
                 cursor={false}
                 content={<ChartTooltipContent hideLabel />}
               />
-              <Bar dataKey="scans" fill="var(--color-scans)" radius={8} />
+              <Bar
+                dataKey="scans"
+                fill="var(--primary)"
+                radius={8}
+                maxBarSize={100}
+              />
             </BarChart>
           </ChartContainer>
         </CardContent>
       </Card>
 
-      <Card className="col-span-2">
-        <CardHeader>
-          <CardTitle>Top Countries</CardTitle>
-          <CardDescription>Where your scans are coming from</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {stats.topCountries.length > 0 ? (
-            <ul className="space-y-2">
-              {stats.topCountries.map((country, index) => (
-                <li
-                  key={index}
-                  className="flex items-center justify-between text-sm"
-                >
-                  <span>{country.country ?? "Unknown"}</span>
-                  <Badge variant="secondary">{country.scanCount}</Badge>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-muted-foreground text-sm">
-              No country data available yet.
-            </p>
-          )}
-        </CardContent>
-      </Card>
+      {/* Browser/OS Analytics */}
+      <div className="col-span-2">
+        <BrowserOsPieChart
+          scans={stats.allScans || []}
+          title="Browser & OS Analytics"
+          description="Distribution across all QR codes"
+        />
+      </div>
+
+      {/* Country Analytics */}
+      <div className="col-span-2">
+        <CountryMapChart
+          scans={stats.allScans || []}
+          title="Global Analytics"
+          description="Worldwide scan distribution"
+        />
+      </div>
+
+      {/* Activity Heatmap */}
+      <div className="col-span-4">
+        <ActivityHeatmap
+          scans={stats.allScans || []}
+          title="Overall Activity Pattern"
+          description="Scan activity across all QR codes by day and hour"
+        />
+      </div>
     </div>
   );
 }

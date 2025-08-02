@@ -26,6 +26,11 @@ import {
   Bar,
 } from "recharts";
 import {
+  BrowserOsPieChart,
+  CountryMapChart,
+  ActivityHeatmap,
+} from "@/components/charts";
+import {
   QrCode as QrCodeIcon,
   Eye,
   Calendar,
@@ -89,13 +94,8 @@ export function QrCodeDetailClientPage({
     return acc;
   }, {} as Record<string, number>);
 
-  const topCountries = Object.entries(countryStats)
-    .sort(([, a]: [string, number], [, b]: [string, number]) => b - a)
-    .slice(0, 5)
-    .map(([country, count]) => ({ country, count }));
-
   return (
-    <div className="space-y-6">
+    <div className="mx-auto w-full max-w-7xl space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="outline" size="sm" asChild>
           <Link href="/dashboard/qr-codes">
@@ -239,6 +239,9 @@ export function QrCodeDetailClientPage({
                   tickLine={false}
                   axisLine={false}
                   tickMargin={8}
+                  tickFormatter={(value) => Math.floor(value).toString()}
+                  domain={[0, "dataMax"]}
+                  allowDecimals={false}
                 />
                 <ChartTooltip
                   cursor={false}
@@ -257,32 +260,17 @@ export function QrCodeDetailClientPage({
         </Card>
       </div>
 
-      {/* Top Countries Card */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Top Countries</CardTitle>
-          <CardDescription>Where your scans are coming from</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {topCountries.length > 0 ? (
-            <ul className="space-y-2">
-              {topCountries.map((country, index) => (
-                <li
-                  key={index}
-                  className="flex items-center justify-between text-sm"
-                >
-                  <span>{country.country}</span>
-                  <Badge variant="secondary">{country.country}</Badge>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-muted-foreground text-sm">
-              No country data available yet.
-            </p>
-          )}
-        </CardContent>
-      </Card>
+      {/* Analytics Charts */}
+      <div className="grid gap-6 md:grid-cols-2">
+        {/* Browser/OS Pie Chart */}
+        <BrowserOsPieChart scans={scans} />
+
+        {/* Country Map Chart */}
+        <CountryMapChart scans={scans} />
+      </div>
+
+      {/* Activity Heatmap */}
+      <ActivityHeatmap scans={scans} />
 
       {/* Scan Details */}
       <Card>
