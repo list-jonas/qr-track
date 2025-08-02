@@ -4,6 +4,7 @@ import { qrCode } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { recordQrCodeScan } from "@/server/qr-codes";
 import { headers } from "next/headers";
+import UAParser from "ua-parser-js";
 
 export async function GET(
   request: NextRequest,
@@ -34,6 +35,14 @@ export async function GET(
       ? forwarded.split(",")[0].trim()
       : headersList.get("x-real-ip") || undefined;
 
+    let os: string | undefined;
+    let browser: string | undefined;
+    if (userAgent) {
+      const ua = new UAParser.UAParser(userAgent);
+      os = ua.getOS().name || undefined;
+      browser = ua.getBrowser().name || undefined;
+    }
+
     // Get geographic information (you might want to use a service like ipapi.co)
     let country: string | undefined;
     let city: string | undefined;
@@ -60,6 +69,8 @@ export async function GET(
       userAgent,
       country,
       city,
+      os,
+      browser,
     });
 
     // Redirect to the target URL

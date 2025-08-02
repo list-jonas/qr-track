@@ -86,6 +86,8 @@ export const qrCodeScan = pgTable("qr_code_scan", {
   userAgent: text("user_agent"),
   country: text("country"),
   city: text("city"),
+  os: text("os"),
+  browser: text("browser"),
   scannedAt: timestamp("scanned_at")
     .$defaultFn(() => new Date())
     .notNull(),

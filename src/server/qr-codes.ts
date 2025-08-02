@@ -169,6 +169,8 @@ export async function recordQrCodeScan(
     userAgent?: string;
     country?: string;
     city?: string;
+    os?: string;
+    browser?: string;
   }
 ) {
   try {
@@ -181,6 +183,8 @@ export async function recordQrCodeScan(
       userAgent: data.userAgent,
       country: data.country,
       city: data.city,
+      os: data.os,
+      browser: data.browser,
     });
 
     return { success: true };

@@ -37,6 +37,14 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { QrCodeActions } from "@/components/qr-code-actions";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@/components/ui/table";
 
 const chartConfig = {
   scans: {
@@ -258,6 +266,44 @@ export function QrCodeDetailClientPage({
             <p className="text-muted-foreground text-sm">
               No country data available yet.
             </p>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Scan Details */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Scan Details</CardTitle>
+          <CardDescription>Recent scan information</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {scans.length > 0 ? (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Country</TableHead>
+                  <TableHead>City</TableHead>
+                  <TableHead>OS</TableHead>
+                  <TableHead>Browser</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {scans.slice(0, 10).map((scan, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      {new Date(scan.scannedAt).toLocaleString()}
+                    </TableCell>
+                    <TableCell>{scan.country || "N/A"}</TableCell>
+                    <TableCell>{scan.city || "N/A"}</TableCell>
+                    <TableCell>{scan.os || "N/A"}</TableCell>
+                    <TableCell>{scan.browser || "N/A"}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <p className="text-muted-foreground text-sm">No scans yet.</p>
           )}
         </CardContent>
       </Card>
