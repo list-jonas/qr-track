@@ -6,7 +6,7 @@ import { InferSelectModel } from "drizzle-orm";
 
 export type QrCode = InferSelectModel<typeof qrCode>;
 export type Scan = InferSelectModel<typeof qrCodeScan>;
-import { eq, desc, count, sql } from "drizzle-orm";
+import { eq, desc, count, sql, and } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { revalidatePath } from "next/cache";
 
@@ -71,7 +71,7 @@ export async function getQrCodeById(id: string, userId: string) {
     const [qrCodeData] = await db
       .select()
       .from(qrCode)
-      .where(eq(qrCode.id, id) && eq(qrCode.userId, userId))
+      .where(and(eq(qrCode.id, id), eq(qrCode.userId, userId)))
       .limit(1);
 
     if (!qrCodeData) {
@@ -93,6 +93,8 @@ export async function getQrCodeById(id: string, userId: string) {
       .where(eq(qrCodeScan.qrCodeId, id))
       .groupBy(sql`DATE(${qrCodeScan.scannedAt})`)
       .orderBy(sql`DATE(${qrCodeScan.scannedAt})`);
+
+    console.log(qrCodeData);
 
     return {
       success: true,
@@ -123,7 +125,7 @@ export async function updateQrCode(
         ...data,
         updatedAt: new Date(),
       })
-      .where(eq(qrCode.id, id) && eq(qrCode.userId, userId))
+      .where(and(eq(qrCode.id, id), eq(qrCode.userId, userId)))
       .returning();
 
     if (!updatedQrCode) {
