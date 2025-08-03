@@ -62,12 +62,6 @@ export default function CreateQrCodePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!session?.user?.id) {
-      toast.error("You must be logged in to create QR codes");
-      return;
-    }
-
     if (!formData.name || !formData.url) {
       toast.error("Name and URL are required");
       return;
@@ -84,7 +78,10 @@ export default function CreateQrCodePage() {
     setIsLoading(true);
 
     try {
-
+      if (!session?.user?.id) {
+        toast.error("You must be logged in to create QR codes");
+        return;
+      }
 
       const result = await createQrCode({
         ...formData,
@@ -205,7 +202,7 @@ export default function CreateQrCodePage() {
                     alt="QR Code Preview"
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    style={{ objectFit: 'contain' }}
+                    style={{ objectFit: "contain" }}
                   />
                 </div>
 

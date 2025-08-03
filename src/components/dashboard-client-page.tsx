@@ -118,7 +118,7 @@ export default function DashboardClientPage({
                 right: 12,
               }}
             >
-              <CartesianGrid vertical={false} />
+              <CartesianGrid vertical={false} stroke="var(--border)" />
               <XAxis
                 dataKey="date"
                 tickLine={false}
@@ -144,9 +144,10 @@ export default function DashboardClientPage({
               <Line
                 dataKey="scans"
                 type="monotone"
-                stroke="var(--primary)"
+                stroke="var(--chart-1)"
                 strokeWidth={2}
-                dot={true}
+                dot={{ r: 2, stroke: "var(--background)", strokeWidth: 1 }}
+                activeDot={{ r: 3 }}
               />
             </LineChart>
           </ChartContainer>
@@ -161,7 +162,7 @@ export default function DashboardClientPage({
         <CardContent>
           <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
             <BarChart accessibilityLayer data={topQrCodesChartData}>
-              <CartesianGrid vertical={false} />
+              <CartesianGrid vertical={false} stroke="var(--border)" />
               <XAxis
                 dataKey="name"
                 tickLine={false}
@@ -188,7 +189,7 @@ export default function DashboardClientPage({
               />
               <Bar
                 dataKey="scans"
-                fill="var(--primary)"
+                fill="var(--chart-2)"
                 radius={8}
                 maxBarSize={100}
               />
