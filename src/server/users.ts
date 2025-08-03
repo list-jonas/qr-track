@@ -2,6 +2,8 @@
 
 import { auth } from "@/lib/auth";
 
+const REGISTRATION_LOCKED = process.env.NEXT_PUBLIC_REGISTRATION_LOCKED === "true";
+
 export const signInEmail = async (email: string, password: string) => {
   try {
     await auth.api.signInEmail({
@@ -32,6 +34,9 @@ export const signUpEmail = async (
   password: string
 ) => {
   try {
+    if (REGISTRATION_LOCKED) {
+      return { error: "Registration is currently disabled." };
+    }
     await auth.api.signUpEmail({
       body: {
         name,

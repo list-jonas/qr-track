@@ -28,6 +28,8 @@ const FormSchema = z.object({
     .min(6, { message: "Password must be at least 6 characters." }),
 });
 
+const REGISTRATION_LOCKED = process.env.NEXT_PUBLIC_REGISTRATION_LOCKED === "true";
+
 export function LoginForm({
   className,
   ...props
@@ -120,12 +122,19 @@ export function LoginForm({
                   </span>
                 </div>
 
-                <div className="text-center text-sm">
-                  Don&apos;t have an account?{" "}
-                  <a href="/signup" className="underline underline-offset-4">
-                    Sign up
-                  </a>
-                </div>
+                {!REGISTRATION_LOCKED && (
+                  <div className="text-center text-sm">
+                    Don&apos;t have an account?{" "}
+                    <a href="/signup" className="underline underline-offset-4">
+                      Sign up
+                    </a>
+                  </div>
+                )}
+                {REGISTRATION_LOCKED && (
+                  <div className="text-muted-foreground text-center text-sm">
+                    New registrations are currently disabled.
+                  </div>
+                )}
               </div>
             </form>
           </Form>
