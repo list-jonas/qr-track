@@ -113,7 +113,7 @@ export function BrowserOsPieChart({
 
   return (
     <Card className="p-0">
-      <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row mb-0">
+      <CardHeader className="flex flex-col items-stretch space-y-0 border-b !p-0 sm:flex-row mb-0">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
           <CardTitle>{title}</CardTitle>
           <CardDescription>{description}</CardDescription>
