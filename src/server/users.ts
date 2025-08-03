@@ -2,7 +2,8 @@
 
 import { auth } from "@/lib/auth";
 
-const REGISTRATION_LOCKED = process.env.NEXT_PUBLIC_REGISTRATION_LOCKED === "true";
+const REGISTRATION_LOCKED =
+  process.env.NEXT_PUBLIC_REGISTRATION_LOCKED === "true";
 
 export const signInEmail = async (email: string, password: string) => {
   try {

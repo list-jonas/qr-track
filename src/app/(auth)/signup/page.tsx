@@ -1,7 +1,8 @@
 import { SignupForm } from "@/components/auth/signup-form";
 import { redirect } from "next/navigation";
 
-const REGISTRATION_LOCKED = process.env.NEXT_PUBLIC_REGISTRATION_LOCKED === "true";
+const REGISTRATION_LOCKED =
+  process.env.NEXT_PUBLIC_REGISTRATION_LOCKED === "true";
 
 export default function SignupPage() {
   if (REGISTRATION_LOCKED) {

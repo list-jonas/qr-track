@@ -1,6 +1,6 @@
 "use client";
 
-import { QrCode, BarChart3, List, Plus } from "lucide-react";
+import { QrCode, BarChart3, List, Plus, Settings } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -35,6 +35,11 @@ const items = [
     url: "/dashboard/create",
     icon: Plus,
   },
+  {
+    title: "Settings",
+    url: "/dashboard/settings",
+    icon: Settings,
+  },
 ];
 
 export function AppSidebar() {
@@ -48,7 +53,7 @@ export function AppSidebar() {
           <span className="font-semibold text-lg">QR Track</span>
         </div>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="justify-between">
         <SidebarGroup>
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>

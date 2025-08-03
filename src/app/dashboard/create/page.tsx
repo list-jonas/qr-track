@@ -101,16 +101,6 @@ export default function CreateQrCodePage() {
     }
   };
 
-  if (!session) {
-    return (
-      <div className="flex items-center justify-center h-96">
-        <p className="text-muted-foreground">
-          Please log in to create QR codes
-        </p>
-      </div>
-    );
-  }
-
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div>

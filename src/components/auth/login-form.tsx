@@ -28,7 +28,8 @@ const FormSchema = z.object({
     .min(6, { message: "Password must be at least 6 characters." }),
 });
 
-const REGISTRATION_LOCKED = process.env.NEXT_PUBLIC_REGISTRATION_LOCKED === "true";
+const REGISTRATION_LOCKED =
+  process.env.NEXT_PUBLIC_REGISTRATION_LOCKED === "true";
 
 export function LoginForm({
   className,
