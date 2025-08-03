@@ -17,13 +17,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-} from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
 import {
   BrowserOsPieChart,
   CountryMapChart,
@@ -182,7 +176,7 @@ export function QrCodeDetailClientPage({
                 alt={`QR Code for ${qrCode.name}`}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                style={{ objectFit: 'contain' }}
+                style={{ objectFit: "contain" }}
               />
             </div>
             <div className="flex gap-2">
@@ -241,7 +235,13 @@ export function QrCodeDetailClientPage({
                   axisLine={false}
                   tickMargin={8}
                   tickFormatter={(value) => Math.floor(value).toString()}
-                  domain={[0, "dataMax"]}
+                  domain={[
+                    0,
+                    chartData.reduce(
+                      (max, item) => Math.max(max, item.scans) + 5,
+                      0
+                    ),
+                  ]}
                   allowDecimals={false}
                 />
                 <ChartTooltip
@@ -251,9 +251,10 @@ export function QrCodeDetailClientPage({
                 <Line
                   dataKey="scans"
                   type="monotone"
-                  stroke="var(--color-scans)"
+                  stroke="var(--chart-1)"
                   strokeWidth={2}
-                  dot={false}
+                  dot={{ r: 3, stroke: "var(--primary)", strokeWidth: 1 }}
+                  activeDot={{ r: 4 }}
                 />
               </LineChart>
             </ChartContainer>

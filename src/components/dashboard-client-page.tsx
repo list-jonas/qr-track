@@ -146,8 +146,8 @@ export default function DashboardClientPage({
                 type="monotone"
                 stroke="var(--chart-1)"
                 strokeWidth={2}
-                dot={{ r: 2, stroke: "var(--background)", strokeWidth: 1 }}
-                activeDot={{ r: 3 }}
+                dot={{ r: 3, stroke: "var(--primary)", strokeWidth: 1 }}
+                activeDot={{ r: 4 }}
               />
             </LineChart>
           </ChartContainer>
